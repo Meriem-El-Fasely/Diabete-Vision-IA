@@ -86,19 +86,53 @@ with col1:
 
 with col2:
     st.subheader("📍 Visualisation PCA (2D)")
-    # Transformation PCA du nouveau point
-    input_pca = pca.transform(input_scaled)
     
-    # Création du graphique (simplifié pour l'exemple)
-    fig, ax = plt.subplots()
-    # Note : Pour un vrai graphique, il faudrait charger les points du dataset original ici
-    ax.scatter(input_pca[0,0], input_pca[0,1], c='red', s=100, label="Patient Actuel")
-    ax.set_xlabel("Composante 1")
-    ax.set_ylabel("Composante 2")
-    ax.legend()
-    ax.set_xlim(-4, 4)
-    ax.set_ylim(-4, 4)
-    st.pyplot(fig)
+    # 1. Chargement et Prétraitement du Dataset pour le fond
+    try:
+        df = pd.read_csv('data/diabetes.csv')
+        
+        # Nettoyage (comme dans le notebook)
+        cols_to_fix = ['Glucose', 'BloodPressure', 'BMI', 'Insulin', 'SkinThickness']
+        df[cols_to_fix] = df[cols_to_fix].replace(0, np.nan)
+        df.fillna(df.median(), inplace=True)
+        
+        X_data = df.drop('Outcome', axis=1).values
+        y_data = df['Outcome']
+        
+        # Transformation
+        X_data_scaled = scaler.transform(X_data)
+        X_data_pca = pca.transform(X_data_scaled)
+        
+        # 2. Création du graphique
+        fig, ax = plt.subplots()
+        
+        # Points du dataset (Diabétiques vs Non-Diabétiques)
+        # Non-Diabétiques
+        ax.scatter(X_data_pca[y_data==0, 0], X_data_pca[y_data==0, 1], 
+                   c='blue', label='Non-Diabétique', alpha=0.5, s=20)
+        # Diabétiques
+        ax.scatter(X_data_pca[y_data==1, 0], X_data_pca[y_data==1, 1], 
+                   c='orange', label='Diabétique', alpha=0.5, s=20)
+        
+        # Point du Patient Actuel
+        # Transformation PCA du nouveau point
+        input_pca = pca.transform(input_scaled)
+        ax.scatter(input_pca[0,0], input_pca[0,1], 
+                   c='red', s=200, marker='*', label="Patient Actuel", edgecolors='black')
+        
+        ax.set_xlabel("Composante Principale 1")
+        ax.set_ylabel("Composante Principale 2")
+        ax.legend()
+        st.pyplot(fig)
+        
+    except Exception as e:
+        st.error(f"Erreur lors du chargement des données pour la visualisation : {e}")
+        # Fallback si le dataset n'est pas trouvé
+        input_pca = pca.transform(input_scaled)
+        fig, ax = plt.subplots()
+        ax.scatter(input_pca[0,0], input_pca[0,1], c='red', s=100, label="Patient Actuel")
+        ax.legend()
+        st.pyplot(fig)
 
 st.markdown("---")
 st.info("Note : Cet outil est à but éducatif et ne remplace pas un avis médical professionnel.")
