@@ -12,19 +12,19 @@ L'application s'appuie sur trois composants d'IA complémentaires :
     *   Ce modèle estime la probabilité qu'un patient soit diabétique.
     *   Il se base sur des critères médicaux standards : Glucose, IMC, Âge, Pression artérielle, Insuline, etc.
     
-    ![Interface de Prédiction](screenshots/2.jpg)
+    ![Interface de Prédiction](screenshots/1.jpg)
 
 2.  **Détection d'Anomalies (Isolation Forest)** : 
     *   Ce modèle de détection d'outliers vérifie si les données saisies sont cohérentes.
     *   Il alerte l'utilisateur si le profil du patient est atypique (données potentiellement erronées ou cas clinique rare).
 
-    ![Alerte Anomalie](screenshots/3.jpg)
+    ![Alerte Anomalie](screenshots/2.jpg)
 
 3.  **Visualisation (PCA)** : 
     *   Utilisation de l'Analyse en Composantes Principales pour réduire les 8 dimensions médicales en 2 dimensions.
     *   Permet de visualiser graphiquement où se situe le patient testé par rapport à la distribution des données d'entraînement.
 
-    ![Visualisation PCA](screenshots/1.jpg)
+    ![Visualisation PCA](screenshots/3.jpg)
 
 ## 📂 Structure du Dossier
 Le projet est organisé pour séparer clairement les données, le code d'entraînement et l'application finale :
